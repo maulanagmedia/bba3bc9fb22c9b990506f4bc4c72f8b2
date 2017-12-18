@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "918517748449",
+    "firebase_url": "https://gmedia-finance.firebaseio.com",
+    "project_id": "gmedia-finance",
+    "storage_bucket": "gmedia-finance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918517748449:android:fc89e1a54e1fcdb2",
+        "android_client_info": {
+          "package_name": "gmedia.net.id.finance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "918517748449-qdb79t9s0irgd037elsdvo9tl8g738g0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "gmedia.net.id.finance",
+            "certificate_hash": "e975876398fd23dc0982c682e25ef27081c5dde4"
+          }
+        },
+        {
+          "client_id": "918517748449-5iqk30akne7721ft08eempsg821rao5m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXhi6f9Z4i-HL6Sdut0qxOAENdn2uO45w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "918517748449-5iqk30akne7721ft08eempsg821rao5m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
