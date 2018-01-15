@@ -56,7 +56,12 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:id="@+id/edt_search"
+                android:hint="Nama"
+                android:inputType="textPersonName"
+                android:imeOptions="actionSearch"
                 android:visibility="gone"
+                android:paddingRight="@dimen/margin_default"
+                android:paddingLeft="@dimen/margin_default"
                 android:background="@drawable/bg_search"/>
 
         </LinearLayout>
@@ -99,6 +104,17 @@
             android:layout_centerInParent="true"
             android:id="@+id/pb_loading"
             android:visibility="gone"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Refresh"
+            android:id="@+id/btn_refresh"
+            android:visibility="gone"
+            android:background="@drawable/ripple_selected"
+            android:drawableTop="@mipmap/ic_refresh"
+            />
 
     </RelativeLayout>
 

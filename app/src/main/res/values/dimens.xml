@@ -7,6 +7,9 @@
     <dimen name="radius_small">2dp</dimen>
     <dimen name="radius">3dp</dimen>
     <dimen name="radius_big">5dp</dimen>
+    <dimen name="radius_super_big">8dp</dimen>
     <dimen name="stroke_width_small">1dp</dimen>
     <dimen name="rating_size">10dp</dimen>
+    <dimen name="title_size">11sp</dimen>
+    <dimen name="value_size">18sp</dimen>
 </resources>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_default"
+        android:layout_marginLeft="@dimen/margin_default"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/ll_header"
+            android:background="@drawable/bg_top_white"
+            android:padding="@dimen/margin_default"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textSize="@dimen/title_size"
+                    android:text="Diajukan Oleh"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textSize="@dimen/title_size"
+                    android:id="@+id/tv_tanggal"
+                    android:gravity="right|center_vertical"
+                    android:textColor="@color/color_orange"
+                    android:text=""/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_black"
+                android:id="@+id/tv_pengaju"
+                android:textSize="@dimen/value_size"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/title_size"
+                android:text="Rekening Tujuan"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_black"
+                android:id="@+id/tv_rekening_tujuan"
+                android:textSize="@dimen/value_size"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/title_size"
+                android:text="Nominal"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_black"
+                android:id="@+id/tv_nominal"
+                android:textSize="@dimen/value_size"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/title_size"
+                android:text="Keterangan"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_black"
+                android:id="@+id/tv_keterangan"
+                android:textSize="@dimen/value_size"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/title_size"
+                android:text="Pembayaran ke"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_black"
+                android:id="@+id/tv_tujuan_pembayaran"
+                android:textSize="@dimen/value_size"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_header"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_left_blue"
+                android:text="Approve"
+                android:id="@+id/btn_approve"
+                android:textColor="@color/color_white"
+                android:gravity="center">
+            </Button>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_right_orange"
+                android:text="Reject"
+                android:id="@+id/btn_reject"
+                android:textColor="@color/color_white"
+                android:gravity="center">
+            </Button>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

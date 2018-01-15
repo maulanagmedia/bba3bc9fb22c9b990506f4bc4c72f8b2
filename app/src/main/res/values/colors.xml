@@ -12,6 +12,7 @@
     <color name="color_red">#f53131</color>
     <color name="color_red_active">#ff9898</color>
     <color name="color_grey">#9b9b9b</color>
+    <color name="color_grey_blue">#e6e6e6</color>
     <color name="color_dark_grey">#595959</color>
     <color name="color_black">#000000</color>
     <color name="color_blue">#31519e</color>
@@ -20,4 +21,6 @@
     <color name="color_orange_text">#fd6705</color>
     <color name="color_star1">#9b9b9b</color>
     <color name="color_star2">#ffad42</color>
+    <color name="color_orange">#ff6702</color>
+    <color name="color_blue_index">#0202ba</color>
 </resources>

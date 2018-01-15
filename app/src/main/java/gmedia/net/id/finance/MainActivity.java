@@ -9,9 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,14 +27,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.FormatItem;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.SessionManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.finance.Adapter.ListPengajuanAdapter;
+import gmedia.net.id.finance.Utils.ServerUrl;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,11 +56,15 @@ public class MainActivity extends AppCompatActivity {
     private static int count = 10;
     private static String keyword = "";
     private static ItemValidation iv = new ItemValidation();
+    private static SessionManager session;
     private ImageView ivSearch, ivHistory;
     private TextView tvTitle;
     private EditText edtSearch;
     private boolean isOnSearch = false;
     private ListPengajuanAdapter pengajuanAdapter;
+    private Button btnRefresh;
+    private boolean isLoading = false;
+    private static View footerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +92,30 @@ public class MainActivity extends AppCompatActivity {
         tvTitle = (TextView) findViewById(R.id.tv_title);
         edtSearch = (EditText) findViewById(R.id.edt_search);
         ivHistory = (ImageView) findViewById(R.id.iv_history);
+        btnRefresh = (Button) findViewById(R.id.btn_refresh);
         lvPengajuan = (ListView) findViewById(R.id.lv_pengajuan);
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
+        LayoutInflater li = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        footerList = li.inflate(R.layout.footer_list, null);
 
         //inital
+        isLoading = false;
         isOnSearch = false;
+        session = new SessionManager(MainActivity.this);
         masterList = new ArrayList<>();
 
         initEvent();
 
         startIndex = 0;
+        keyword = "";
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        startIndex = 0;
+        keyword = "";
         getDataPengajuan();
     }
 
@@ -96,11 +129,51 @@ public class MainActivity extends AppCompatActivity {
                     isOnSearch = false;
                     tvTitle.setVisibility(View.GONE);
                     edtSearch.setVisibility(View.VISIBLE);
+                    edtSearch.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
                 }else{
                     isOnSearch = true;
                     tvTitle.setVisibility(View.VISIBLE);
                     edtSearch.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        ivHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(MainActivity.this, HistoryPengajuan.class);
+                startActivity(intent);
+            }
+        });
+
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startIndex = 0;
+                getDataPengajuan();
+                btnRefresh.setVisibility(View.GONE);
+            }
+        });
+
+        edtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+
+                if(i == EditorInfo.IME_ACTION_SEARCH){
+
+                    keyword = edtSearch.getText().toString();
+                    startIndex = 0;
+                    getDataPengajuan();
+
+                    iv.hideSoftKey(MainActivity.this);
+                    return true;
+                }
+
+                return false;
             }
         });
     }
@@ -110,30 +183,23 @@ public class MainActivity extends AppCompatActivity {
         pbLoading.setVisibility(View.VISIBLE);
         masterList = new ArrayList<>();
 
-        pbLoading.setVisibility(View.GONE);
-        masterList.add(new CustomItem("1","Sianne Hoo", "Pengajuan Transfer Dana", "Mohon disetejui pengajuan untuk operasional",  "2017-12-18", "2"));
-        masterList.add(new CustomItem("2","Sianne Hoo", "Pengajuan Transfer Dana", "Mohon disetejui pengajuan untuk operasional", "2017-12-17", "1"));
-        masterList.add(new CustomItem("3","Sianne Hoo", "Pengajuan Transfer Dana", "Mohon disetejui pengajuan untuk operasional", "2017-12-16", "3"));
-        setPengajuanAdapter(masterList);
-
-        /*JSONObject jBody = new JSONObject();
+        JSONObject jBody = new JSONObject();
         try {
-            jBody.put("nomeja", edtNoMeja.getText().toString());
-            jBody.put("tgl", iv.ChangeFormatDateString(edtTanggal.getText().toString(), FormatItem.formatDateDisplay, FormatItem.formatDate));
-            jBody.put("start_index", String.valueOf(startIndex));
+            jBody.put("keyword", edtSearch.getText().toString());
+            jBody.put("start", String.valueOf(startIndex));
             jBody.put("count", String.valueOf(count));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(context, jBody, "POST", serverURL.getRiwayatOrder(), "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(MainActivity.this, jBody, "POST", ServerUrl.getPengajuan, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
                 try {
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
-                    listTransaksi = new ArrayList<>();
+                    masterList = new ArrayList<>();
 
                     if(iv.parseNullInteger(status) == 200){
 
@@ -141,27 +207,29 @@ public class MainActivity extends AppCompatActivity {
                         for(int i = 0; i < jsonArray.length(); i++){
 
                             JSONObject jo = jsonArray.getJSONObject(i);
-                            listTransaksi.add(new CustomItem(jo.getString("nobukti"), jo.getString("urutan"), jo.getString("pelanggan"), jo.getString("total"), jo.getString("usertgl"), jo.getString("nomeja"), jo.getString("nama"), jo.getString("jml_item"), jo.getString("cashier_status"), jo.getString("kitchen_status"), jo.getString("bar_status"), jo.getString("print_no"), jo.getString("status"), jo.getString("jumlah_plg")));
+                            masterList.add(new CustomItem(jo.getString("nomor"), jo.getString("nama"), jo.getString("nomor"), jo.getString("keterangan"),  jo.getString("timestamp"), jo.getString("urgent"),jo.getString("flag")));
                         }
                     }
 
-                    getListTransaksi(listTransaksi);
-                    pbLoadTransaksi.setVisibility(View.GONE);
+                    setPengajuanAdapter(masterList);
+                    pbLoading.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    getListTransaksi(null);
-                    pbLoadTransaksi.setVisibility(View.GONE);
-                    Toast.makeText(context, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
+                    setPengajuanAdapter(null);
+                    pbLoading.setVisibility(View.GONE);
+                    Toast.makeText(MainActivity.this, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
+                    btnRefresh.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onError(String result) {
-                pbLoadTransaksi.setVisibility(View.GONE);
-                getListTransaksi(null);
-                Toast.makeText(context, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
+                setPengajuanAdapter(null);
+                pbLoading.setVisibility(View.GONE);
+                Toast.makeText(MainActivity.this, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
+                btnRefresh.setVisibility(View.VISIBLE);
             }
-        });*/
+        });
     }
 
     private void setPengajuanAdapter(List<CustomItem> listItem){
@@ -172,7 +240,95 @@ public class MainActivity extends AppCompatActivity {
 
             pengajuanAdapter = new ListPengajuanAdapter(MainActivity.this, listItem);
             lvPengajuan.setAdapter(pengajuanAdapter);
+
+            lvPengajuan.setOnScrollListener(onScrollListener());
+
+            lvPengajuan.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
+                }
+            });
         }
+    }
+
+    private AbsListView.OnScrollListener onScrollListener() {
+        return new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                int threshold = 1;
+                int count = lvPengajuan.getCount();
+
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    if (lvPengajuan.getLastVisiblePosition() >= count - threshold && !isLoading) {
+
+                        isLoading = true;
+                        lvPengajuan.addFooterView(footerList);
+                        startIndex += count;
+                        getMoreData();
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                                 int totalItemCount) {
+            }
+
+        };
+    }
+
+    private void getMoreData() {
+
+        isLoading = true;
+        final List<CustomItem> moreList = new ArrayList<>();
+        JSONObject jBody = new JSONObject();
+
+        try {
+            jBody.put("keyword", edtSearch.getText().toString());
+            jBody.put("start", String.valueOf(startIndex));
+            jBody.put("count", String.valueOf(count));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(MainActivity.this, jBody, "POST", ServerUrl.getPengajuan, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray items = response.getJSONArray("response");
+                        for(int i  = 0; i < items.length(); i++){
+
+                            JSONObject jo = items.getJSONObject(i);
+                            moreList.add(new CustomItem(jo.getString("nomor"), jo.getString("nama"), jo.getString("nomor"), jo.getString("keterangan"),  jo.getString("timestamp"), jo.getString("urgent"),jo.getString("flag")));
+                        }
+
+                        lvPengajuan.removeFooterView(footerList);
+                        if(pengajuanAdapter!= null) pengajuanAdapter.addMoreData(moreList);
+                    }
+                    isLoading = false;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isLoading = false;
+                    lvPengajuan.removeFooterView(footerList);
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                isLoading = false;
+                lvPengajuan.removeFooterView(footerList);
+            }
+        });
     }
 
     /*@Override

@@ -163,18 +163,18 @@ public class LoginScreen extends AppCompatActivity {
                         String email = response.getJSONObject("response").getString("email");
                         String nama = response.getJSONObject("response").getString("nama");
                         session.createLoginSession(uid, email, nama ,edtUsername.getText().toString(),edtPassword.getText().toString(), (cbRemeber.isChecked())? "1": "0");
-                        Toast.makeText(LoginScreen.this, message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(LoginScreen.this, MainActivity.class);
                         startActivity(intent);
                         progressDialog.dismiss();
                         finish();
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }else{
-                        Toast.makeText(LoginScreen.this, message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(LoginScreen.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
                 }
 
                 progressDialog.dismiss();
@@ -183,7 +183,7 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onError(String result) {
 
-                Toast.makeText(LoginScreen.this, "Terjadi kesalahan saat mengakses data, harap ulangi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginScreen.this, "Terjadi kesalahan saat mengakses data, harap ulangi", Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
         });

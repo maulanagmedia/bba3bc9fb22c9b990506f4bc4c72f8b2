@@ -10,7 +10,8 @@
         android:background="@drawable/ripple_selected"
         android:layout_marginLeft="@dimen/margin_tiny"
         android:layout_marginRight="@dimen/margin_tiny"
-        android:layout_marginBottom="@dimen/margin_tiny">
+        android:layout_marginBottom="@dimen/margin_tiny"
+        android:layout_marginTop="@dimen/margin_tiny">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,17 +46,6 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/color_red_text"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:visibility="gone"
-                android:id="@+id/tv_item0"/>
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="0.6"
@@ -66,8 +56,19 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_red_text"
                     android:gravity="center_vertical"
-                    android:textSize="19sp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:visibility="gone"
+                    android:id="@+id/tv_item0"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/color_black"
                     android:id="@+id/tv_item1"/>
@@ -76,7 +77,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:textSize="19sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"
                     android:textColor="@color/color_black"
                     android:id="@+id/tv_item2"/>
@@ -84,7 +85,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textColor="@color/color_dark_grey"
                     android:gravity="center_vertical"
                     android:singleLine="true"
@@ -110,16 +111,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:gravity="left">
+                    android:gravity="right"
+                    android:orientation="horizontal">
 
                     <RatingBar
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:numStars="3"
                         android:rating="3"
                         android:id="@+id/rb_status"
-                        style="@style/CustomRating"
+                        style="@style/Base.Widget.AppCompat.RatingBar.Small"
                         android:theme="@style/RatingBar"/>
+
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
