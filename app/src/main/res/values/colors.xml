@@ -14,9 +14,11 @@
     <color name="color_grey">#9b9b9b</color>
     <color name="color_grey_blue">#e6e6e6</color>
     <color name="color_grey_blue2">#f3f3ff</color>
+    <color name="color_grey2">#b7b7b7</color>
     <color name="color_dark_grey">#595959</color>
     <color name="color_black">#000000</color>
     <color name="color_blue">#0088C2</color>
+    <color name="color_blue_transparent">#680088c2</color>
     <color name="color_blue_active">#007aae</color>
     <color name="color_red_text">#fc0402</color>
     <color name="color_orange_text">#fd6705</color>

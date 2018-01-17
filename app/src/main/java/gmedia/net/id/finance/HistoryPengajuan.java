@@ -17,10 +17,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +59,9 @@ public class HistoryPengajuan extends AppCompatActivity {
     private int count = 10;
     private String keyword = "";
     private ListHistoryAdapter historyAdapter;
+    private Spinner spBulan, spTahun;
+    private String bulanNow = "", tahunNow = "";
+    private List<CustomItem> listBulanTahun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,8 @@ public class HistoryPengajuan extends AppCompatActivity {
 
     private void initUI() {
 
+        spBulan = (Spinner) findViewById(R.id.sp_bulan);
+        spTahun = (Spinner) findViewById(R.id.sp_tahun);
         lvHistory = (ListView) findViewById(R.id.lv_history);
         pbLoading = (ProgressBar) findViewById(R.id.pb_loading);
         btnRefresh = (Button) findViewById(R.id.btn_refresh);
@@ -94,13 +101,167 @@ public class HistoryPengajuan extends AppCompatActivity {
         keyword = "";
     }
 
+    private void getTahunHeader() {
+
+        pbLoading.setVisibility(View.VISIBLE);
+        ApiVolley request = new ApiVolley(HistoryPengajuan.this, new JSONObject(), "GET", ServerUrl.getTahunHeader, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+                    listBulanTahun = new ArrayList<>();
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray jsonArray = response.getJSONArray("response");
+                        for(int i = 0; i < jsonArray.length(); i++){
+
+                            JSONObject jo = jsonArray.getJSONObject(i);
+                            listBulanTahun.add(new CustomItem(jo.getString("month"), jo.getString("year")));
+                            if(i == 0) {
+                                bulanNow = jo.getString("month");
+                                tahunNow = jo.getString("year");
+                            }
+                        }
+                    }
+
+                    parseData(listBulanTahun);
+                    pbLoading.setVisibility(View.GONE);
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+                    parseData(listBulanTahun);
+                    pbLoading.setVisibility(View.GONE);
+                    Toast.makeText(HistoryPengajuan.this, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                parseData(listBulanTahun);
+                pbLoading.setVisibility(View.GONE);
+                Toast.makeText(HistoryPengajuan.this, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void parseData(final List<CustomItem> listItem){
+
+        if(listItem != null && listItem.size() > 0){
+
+            // Bulan
+            List<String> bulanList = new ArrayList<>();
+
+            bulanList.add("Januari");
+            bulanList.add("Februari");
+            bulanList.add("Maret");
+            bulanList.add("April");
+            bulanList.add("Mei");
+            bulanList.add("Juni");
+            bulanList.add("Juli");
+            bulanList.add("Agustus");
+            bulanList.add("September");
+            bulanList.add("Oktober");
+            bulanList.add("November");
+            bulanList.add("Desember");
+            setBulanAdapter(bulanList);
+
+            // Tahun
+            List<String> tahunList = new ArrayList<>();
+
+            for(CustomItem item: listItem){
+
+                tahunList.add(item.getItem2());
+            }
+
+            setTahunAdapter(tahunList);
+
+        }
+
+        spBulan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if(spBulan.getAdapter() != null && spTahun.getAdapter() != null){
+
+                    ((TextView) spBulan.getSelectedView()).setTextColor(getResources().getColor(R.color.color_white));
+                    bulanNow = String.valueOf(position+1);
+                    startIndex = 0;
+                    getHistory();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+        });
+
+        spTahun.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if(spBulan.getAdapter() != null && spTahun.getAdapter() != null){
+
+                    ((TextView) spTahun.getSelectedView()).setTextColor(getResources().getColor(R.color.color_white));
+                    tahunNow = parent.getItemAtPosition(position).toString();
+                    startIndex = 0;
+                    getHistory();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        getHistory();
+    }
+
+    private void setBulanAdapter(List<String> listItem){
+
+        spBulan.setAdapter(null);
+
+        if(listItem != null && listItem.size() > 0){
+
+            ArrayAdapter adapter = new ArrayAdapter(HistoryPengajuan.this, R.layout.layout_simple_list, listItem);
+            spBulan.setAdapter(adapter);
+            spBulan.setSelection(0);
+            if(bulanNow != null && bulanNow.length() > 0){
+                spBulan.setSelection(iv.parseNullInteger(bulanNow) - 1);
+            }
+        }
+    }
+
+    private void setTahunAdapter(List<String> listItem){
+
+        spTahun.setAdapter(null);
+
+        if(listItem != null && listItem.size() > 0){
+
+            ArrayAdapter adapter = new ArrayAdapter(HistoryPengajuan.this, R.layout.layout_simple_list, listItem);
+            spTahun.setAdapter(adapter);
+            spTahun.setSelection(0);
+            if(tahunNow != null && tahunNow.length() > 0){
+                int x = 0;
+                for(String item:listItem){
+                    if(item.equals(tahunNow)) spTahun.setSelection(x);
+                    x++;
+                }
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        startIndex = 0;
         keyword = "";
-        getHistory();
+        getTahunHeader();
     }
 
     private void initEvent() {
@@ -118,6 +279,7 @@ public class HistoryPengajuan extends AppCompatActivity {
 
     private void getHistory() {
 
+        startIndex = 0;
         pbLoading.setVisibility(View.VISIBLE);
         masterList = new ArrayList<>();
 
@@ -127,6 +289,8 @@ public class HistoryPengajuan extends AppCompatActivity {
             jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(startIndex));
             jBody.put("count", String.valueOf(count));
+            jBody.put("bulan", bulanNow);
+            jBody.put("tahun", tahunNow);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -324,6 +488,8 @@ public class HistoryPengajuan extends AppCompatActivity {
             jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(startIndex));
             jBody.put("count", String.valueOf(count));
+            jBody.put("bulan", bulanNow);
+            jBody.put("tahun", tahunNow);
         } catch (JSONException e) {
             e.printStackTrace();
         }

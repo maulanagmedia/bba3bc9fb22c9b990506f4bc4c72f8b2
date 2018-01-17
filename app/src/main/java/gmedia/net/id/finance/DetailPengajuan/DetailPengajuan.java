@@ -467,6 +467,8 @@ public class DetailPengajuan extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail_pengajuan, menu);
 
+        menu.getItem(0).setVisible(!isHistory);
+
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -6,9 +6,67 @@
     android:layout_height="match_parent"
     tools:context="gmedia.net.id.finance.HistoryPengajuan">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/color_grey2"
+        android:paddingTop="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_small"
+        android:paddingLeft="@dimen/margin_horizontal"
+        android:paddingRight="@dimen/margin_horizontal"
+        android:id="@+id/ll_head"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:paddingRight="@dimen/margin_small"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bulan"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/title_size"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/color_white"
+                android:id="@+id/sp_bulan"></Spinner>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:paddingLeft="@dimen/margin_small"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tahun"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/title_size"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/color_white"
+                android:id="@+id/sp_tahun"></Spinner>
+        </LinearLayout>
+    </LinearLayout>
+
     <ListView
         android:layout_width="match_parent"
+        android:layout_below="@id/ll_head"
         android:layout_height="match_parent"
+        android:divider="@null"
+        android:paddingTop="@dimen/margin_default"
+        android:paddingBottom="@dimen/margin_default"
         android:id="@+id/lv_history"></ListView>
 
     <ProgressBar
