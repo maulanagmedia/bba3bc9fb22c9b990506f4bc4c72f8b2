@@ -1,14 +1,18 @@
 package gmedia.net.id.finance;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.finance.Adapter.ListPengajuanAdapter;
+import gmedia.net.id.finance.DetailPengajuan.DetailPengajuan;
 import gmedia.net.id.finance.Utils.ServerUrl;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private static String keyword = "";
     private static ItemValidation iv = new ItemValidation();
     private static SessionManager session;
-    private ImageView ivSearch, ivHistory;
+    private ImageView ivSearch, ivHistory, ivLogout;
     private TextView tvTitle;
     private EditText edtSearch;
     private boolean isOnSearch = false;
@@ -65,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnRefresh;
     private boolean isLoading = false;
     private static View footerList;
+    private boolean firstLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +89,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        session = new SessionManager(this);
+
+        if(!session.isLogin()){
+            Toast.makeText(MainActivity.this, "Silahkan login terlebih dahulu", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivity.this, LoginScreen.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
+
         initUI();
     }
 
     private void initUI() {
 
         ivSearch = (ImageView) findViewById(R.id.iv_search);
+        ivLogout = (ImageView) findViewById(R.id.iv_logout);
         tvTitle = (TextView) findViewById(R.id.tv_title);
         edtSearch = (EditText) findViewById(R.id.edt_search);
         ivHistory = (ImageView) findViewById(R.id.iv_history);
@@ -99,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         footerList = li.inflate(R.layout.footer_list, null);
 
         //inital
+        firstLoad = true;
         isLoading = false;
         isOnSearch = false;
         session = new SessionManager(MainActivity.this);
@@ -120,6 +138,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initEvent() {
+
+        if(firstLoad){
+            firstLoad = false;
+
+            edtSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                    if(edtSearch.getText().toString().length() == 0) {
+
+                        startIndex = 0;
+                        getDataPengajuan();
+                    }
+                }
+            });
+        }
 
         ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,6 +220,33 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        ivLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(getResources().getDrawable(R.mipmap.ic_launcher))
+                        .setTitle("Konfirmasi")
+                        .setMessage("Apakah anda yakin ingin logout ?")
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                Intent intent = new Intent(MainActivity.this, LoginScreen.class);
+                                session = new SessionManager(MainActivity.this);
+                                session.logoutUser(intent);
+                            }
+                        })
+                        .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 
     private void getDataPengajuan() {
@@ -207,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
                         for(int i = 0; i < jsonArray.length(); i++){
 
                             JSONObject jo = jsonArray.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("nomor"), jo.getString("nama"), jo.getString("nomor"), jo.getString("keterangan"),  jo.getString("timestamp"), jo.getString("urgent"),jo.getString("flag")));
+                            masterList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("nomor"), jo.getString("keterangan"),  jo.getString("timestamp"), jo.getString("urgent"),jo.getString("flag"), jo.getString("sumber")));
                         }
                     }
 
@@ -248,6 +319,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
+                    String idHeader = (item.getItem1());
+                    Intent intent = new Intent(MainActivity.this, DetailPengajuan.class);
+                    intent.putExtra("id_header", idHeader);
+                    intent.putExtra("nomor", item.getItem3());
+                    startActivity(intent);
                 }
             });
         }
@@ -309,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            moreList.add(new CustomItem(jo.getString("nomor"), jo.getString("nama"), jo.getString("nomor"), jo.getString("keterangan"),  jo.getString("timestamp"), jo.getString("urgent"),jo.getString("flag")));
+                            moreList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("nomor"), jo.getString("keterangan"),  jo.getString("timestamp"), jo.getString("urgent"),jo.getString("flag"), jo.getString("sumber")));
                         }
 
                         lvPengajuan.removeFooterView(footerList);

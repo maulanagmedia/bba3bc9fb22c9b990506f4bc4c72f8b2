@@ -37,7 +37,7 @@ public class ListPengajuanAdapter extends ArrayAdapter{
 
     private static class ViewHolder {
         private RelativeLayout rlContainer;
-        private TextView tvItem0, tvItem1, tvItem2, tvItem3, tvTanggal;
+        private TextView tvItem0, tvItem1, tvItem2, tvItem3, tvItem4, tvTanggal;
         private RatingBar rbStatus;
         private TextView tvLabel;
     }
@@ -88,6 +88,7 @@ public class ListPengajuanAdapter extends ArrayAdapter{
             holder.tvItem1 = (TextView) convertView.findViewById(R.id.tv_item1);
             holder.tvItem2 = (TextView) convertView.findViewById(R.id.tv_item2);
             holder.tvItem3 = (TextView) convertView.findViewById(R.id.tv_item3);
+            holder.tvItem4 = (TextView) convertView.findViewById(R.id.tv_item4);
             holder.tvTanggal = (TextView) convertView.findViewById(R.id.tv_tanggal);
             holder.rbStatus = (RatingBar) convertView.findViewById(R.id.rb_status);
             convertView.setTag(holder);
@@ -97,9 +98,9 @@ public class ListPengajuanAdapter extends ArrayAdapter{
 
         final CustomItem itemSelected = items.get(position);
 
-        if(itemSelected.getItem7().equals("2")){
+        if(!itemSelected.getItem7().equals("1")){
             holder.tvItem0.setVisibility(View.VISIBLE);
-            holder.tvItem0.setText("Pengajuan Ulang");
+            holder.tvItem0.setText("Pengajuan ulang ke " + itemSelected.getItem7());
         }else{
             holder.tvItem0.setVisibility(View.GONE);
         }
@@ -107,7 +108,20 @@ public class ListPengajuanAdapter extends ArrayAdapter{
         holder.tvItem1.setText(itemSelected.getItem2());
         holder.tvItem2.setText(itemSelected.getItem3());
         holder.tvItem3.setText(itemSelected.getItem4());
-        holder.tvTanggal.setText(iv.ChangeFormatDateString(itemSelected.getItem5(), FormatItem.formatTimestamp, FormatItem.formatDateDisplay1));
+        holder.tvItem4.setText(itemSelected.getItem8());
+        holder.tvTanggal.setText(iv.ChangeFormatDateString(itemSelected.getItem5(), FormatItem.formatTimestamp, FormatItem.formatDateDisplay2));
+
+        if(itemSelected.getItem6().equals("1")){
+
+            holder.tvLabel.setBackground(context.getResources().getDrawable(R.drawable.circle_blue_index));
+        }else if(itemSelected.getItem6().equals("2")){
+
+            holder.tvLabel.setBackground(context.getResources().getDrawable(R.drawable.circle_orange_index));
+        }else{
+
+            holder.tvLabel.setBackground(context.getResources().getDrawable(R.drawable.circle_red_index));
+        }
+
         int rating = iv.parseNullInteger(itemSelected.getItem6());
         holder.rbStatus.setNumStars(rating);
         holder.rbStatus.setRating(iv.parseNullFloat(itemSelected.getItem6()));

@@ -40,6 +40,7 @@ public class LoginScreen extends AppCompatActivity {
     private boolean visibleTapped;
     private ItemValidation iv = new ItemValidation();
     private ImageView ivVisible;
+    private String username = "",password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,8 @@ public class LoginScreen extends AppCompatActivity {
         if (session.isSaved()) {
 
             edtUsername.setText(session.getUserDetails().get(SessionManager.TAG_USERNAME));
-            edtPassword.setText(session.getUserDetails().get(SessionManager.TAG_PASSWORD));
+            password = iv.decodeBase64(session.getUserDetails().get(SessionManager.TAG_PASSWORD));
+            edtPassword.setText(password);
             cbRemeber.setChecked(true);
             validasiLogin();
         }
@@ -137,10 +139,12 @@ public class LoginScreen extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+        password = iv.encodeBase64(edtPassword.getText().toString());
+
         JSONObject jBody = new JSONObject();
         try {
             jBody.put("username", edtUsername.getText().toString());
-            jBody.put("password", edtPassword.getText().toString());
+            jBody.put("password", password);
             jBody.put("fcm_id", refreshToken);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -162,7 +166,7 @@ public class LoginScreen extends AppCompatActivity {
                         String uid = response.getJSONObject("response").getString("id_employee");
                         String email = response.getJSONObject("response").getString("email");
                         String nama = response.getJSONObject("response").getString("nama");
-                        session.createLoginSession(uid, email, nama ,edtUsername.getText().toString(),edtPassword.getText().toString(), (cbRemeber.isChecked())? "1": "0");
+                        session.createLoginSession(uid, email, nama ,edtUsername.getText().toString(),password, (cbRemeber.isChecked())? "1": "0");
                         Toast.makeText(LoginScreen.this, message, Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(LoginScreen.this, MainActivity.class);
                         startActivity(intent);

@@ -20,33 +20,26 @@
             android:padding="@dimen/margin_default"
             >
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="15dp"
+                android:id="@+id/tv_tanggal"
+                android:gravity="center_vertical"
+                android:textColor="@color/color_orange"/>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textSize="@dimen/title_size"
-                    android:text="Diajukan Oleh"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textSize="@dimen/title_size"
-                    android:id="@+id/tv_tanggal"
-                    android:gravity="right|center_vertical"
-                    android:textColor="@color/color_orange"
-                    android:text=""/>
-            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="@dimen/title_size"
+                android:text="Diajukan Oleh"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -119,36 +112,16 @@
                 android:id="@+id/tv_tujuan_pembayaran"
                 android:textSize="@dimen/value_size"/>
         </LinearLayout>
-        
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_header"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:weightSum="2">
-            
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_left_blue"
-                android:text="Approve"
-                android:id="@+id/btn_approve"
-                android:textColor="@color/color_white"
-                android:gravity="center">
-            </Button>
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_right_orange"
-                android:text="Reject"
-                android:id="@+id/btn_reject"
-                android:textColor="@color/color_white"
-                android:gravity="center">
-            </Button>
-        </LinearLayout>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/iv_close"
+            android:padding="@dimen/margin_small"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ripple_selected"
+            android:layout_margin="@dimen/margin_default"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_close"/>
     </RelativeLayout>
 </RelativeLayout>

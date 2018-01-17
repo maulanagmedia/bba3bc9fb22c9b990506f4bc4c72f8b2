@@ -1,11 +1,16 @@
 package gmedia.net.id.finance.DetailPengajuan.Adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,7 +21,10 @@ import com.maulana.custommodul.ItemValidation;
 
 import java.util.List;
 
+import gmedia.net.id.finance.DetailPengajuan.DetailPengajuan;
 import gmedia.net.id.finance.R;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 
 /**
@@ -78,6 +86,84 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
         }
 
         final CustomItem itemSelected = items.get(position);
+
+        holder.tvPengaju.setText(itemSelected.getItem2());
+        holder.tvRekeningTujuan.setText(itemSelected.getItem3());
+        holder.tvNominal.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem4())));
+        holder.tvKeterangan.setText(itemSelected.getItem5());
+        holder.tvTujuanPembayaran.setText(itemSelected.getItem6());
+        holder.tvTanggal.setText(itemSelected.getItem7());
+
+        holder.btnApprove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setIcon(context.getResources().getDrawable(R.mipmap.ic_launcher))
+                        .setTitle("Konfirmasi")
+                        .setMessage("Anda yakin menyetujui pengajuan "+ itemSelected.getItem2() + " sebesar "+iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem4())) + " ?" )
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                DetailPengajuan.updateDetailPengajuan(itemSelected.getItem1(), true, "");
+                            }
+                        })
+                        .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
+            }
+        });
+
+        holder.btnReject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                LayoutInflater inflater = (LayoutInflater) ((Activity)context).getSystemService(LAYOUT_INFLATER_SERVICE);
+                View viewDialog = inflater.inflate(R.layout.layout_reject_reason, null);
+                builder.setView(viewDialog);
+
+                final EditText edtKeterangan= (EditText) viewDialog.findViewById(R.id.edt_keterangan);
+                final ImageView ivSend = (ImageView) viewDialog.findViewById(R.id.iv_send);
+
+                final AlertDialog alert = builder.create();
+                alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                ivSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view2) {
+
+                        AlertDialog dialog = new AlertDialog.Builder(context)
+                                .setIcon(context.getResources().getDrawable(R.mipmap.ic_launcher))
+                                .setTitle("Konfirmasi")
+                                .setMessage("Anda yakin menolak pengajuan "+ itemSelected.getItem2() + " sebesar "+iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem4())) + " ?" )
+                                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        if(alert != null) alert.dismiss();
+                                        DetailPengajuan.updateDetailPengajuan(itemSelected.getItem1(), false, edtKeterangan.getText().toString());
+                                    }
+                                })
+                                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                })
+                                .show();
+
+                    }
+                });
+
+                alert.show();
+            }
+        });
 
         return convertView;
     }

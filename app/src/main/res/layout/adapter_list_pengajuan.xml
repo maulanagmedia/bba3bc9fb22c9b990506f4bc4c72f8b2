@@ -38,7 +38,7 @@
                         android:layout_margin="@dimen/margin_default"
                         android:text="A"
                         android:gravity="center"
-                        android:background="@drawable/circle_background_dark"
+                        android:background="@drawable/circle_blue_index"
                         android:id="@+id/tv_label"
                         android:textSize="24sp"
                         android:textStyle="bold"
@@ -91,6 +91,14 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:id="@+id/tv_item3"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="@color/color_dark_grey"
+                    android:gravity="center_vertical"
+                    android:id="@+id/tv_item4"/>
             </LinearLayout>
 
             <RelativeLayout

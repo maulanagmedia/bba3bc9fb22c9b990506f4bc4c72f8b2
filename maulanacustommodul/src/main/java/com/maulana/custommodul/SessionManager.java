@@ -68,36 +68,36 @@ public class SessionManager {
 	public HashMap<String, String> getUserDetails(){
 		HashMap<String, String> user = new HashMap<String, String>();
 		// user nik
-		user.put(TAG_UID, pref.getString(TAG_UID, null));
+		user.put(TAG_UID, pref.getString(TAG_UID, ""));
 
-		user.put(TAG_EMAIL, pref.getString(TAG_EMAIL, null));
+		user.put(TAG_EMAIL, pref.getString(TAG_EMAIL, ""));
 
-		user.put(TAG_NAMA, pref.getString(TAG_NAMA, null));
+		user.put(TAG_NAMA, pref.getString(TAG_NAMA, ""));
 
-		user.put(TAG_USERNAME, pref.getString(TAG_USERNAME, null));
+		user.put(TAG_USERNAME, pref.getString(TAG_USERNAME, ""));
 
-		user.put(TAG_PASSWORD, pref.getString(TAG_PASSWORD, null));
+		user.put(TAG_PASSWORD, pref.getString(TAG_PASSWORD, ""));
 
-		user.put(TAG_SAVED, pref.getString(TAG_SAVED, null));
+		user.put(TAG_SAVED, pref.getString(TAG_SAVED, ""));
 
 		// return user
 		return user;
 	}
 
 	public String getUserInfo(String key){
-		return pref.getString(key, null);
+		return pref.getString(key, "");
 	}
 
 	public String getNama(){
-		return pref.getString(TAG_NAMA, null);
+		return pref.getString(TAG_NAMA, "");
 	}
 
 	public String getUsername(){
-		return pref.getString(TAG_USERNAME, null);
+		return pref.getString(TAG_USERNAME, "");
 	}
 
 	public String getPassword(){
-		return pref.getString(TAG_PASSWORD, null);
+		return pref.getString(TAG_PASSWORD, "");
 	}
 
 	/**
@@ -131,6 +131,11 @@ public class SessionManager {
 		}else{
 			return false;
 		}
+	}
+
+	public boolean isLogin(){
+
+		return pref.getBoolean(IS_LOGIN, false);
 	}
 
 }

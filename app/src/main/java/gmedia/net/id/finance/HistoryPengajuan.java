@@ -1,15 +1,27 @@
 package gmedia.net.id.finance;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maulana.custommodul.ApiVolley;
@@ -26,6 +38,7 @@ import java.util.List;
 
 import gmedia.net.id.finance.Adapter.ListHistoryAdapter;
 import gmedia.net.id.finance.Adapter.ListPengajuanAdapter;
+import gmedia.net.id.finance.DetailPengajuan.DetailPengajuan;
 import gmedia.net.id.finance.Utils.ServerUrl;
 
 public class HistoryPengajuan extends AppCompatActivity {
@@ -111,6 +124,7 @@ public class HistoryPengajuan extends AppCompatActivity {
         JSONObject jBody = new JSONObject();
         try {
             /*jBody.put("keyword", edtSearch.getText().toString());*/
+            jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(startIndex));
             jBody.put("count", String.valueOf(count));
         } catch (JSONException e) {
@@ -132,7 +146,7 @@ public class HistoryPengajuan extends AppCompatActivity {
                         for(int i = 0; i < jsonArray.length(); i++){
 
                             JSONObject jo = jsonArray.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("keterangan"), jo.getString("timestamp"),  jo.getString("urgent"), jo.getString("status")));
+                            masterList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("keterangan"), jo.getString("updated_time"),  jo.getString("urgent"), jo.getString("status"), jo.getString("reason"), jo.getString("nomor"), jo.getString("sumber")));
                         }
                     }
 
@@ -168,7 +182,108 @@ public class HistoryPengajuan extends AppCompatActivity {
             lvHistory.setAdapter(historyAdapter);
 
             lvHistory.setOnScrollListener(onScrollListener());
+
+            lvHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
+
+                    Intent intent = new Intent(HistoryPengajuan.this, DetailPengajuan.class);
+                    intent.putExtra("id_header", item.getItem1());
+                    intent.putExtra("nomor", item.getItem8());
+                    intent.putExtra("is_history", true);
+                    startActivity(intent);
+
+
+                    //getDetailPengajuan(item.getItem1());
+                }
+            });
         }
+    }
+
+    private void getDetailPengajuan(String id){
+
+        pbLoading.setVisibility(View.VISIBLE);
+
+        JSONObject jBody = new JSONObject();
+        try {
+            jBody.put("id_header", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(HistoryPengajuan.this, jBody, "POST", ServerUrl.getDetailPengajuan+id, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getJSONObject("metadata").getString("status");
+
+                    if(iv.parseNullInteger(status) == 200){
+
+                        JSONArray jsonArray = response.getJSONArray("response");
+                        if(jsonArray.length() > 0){
+
+                            JSONObject jo = jsonArray.getJSONObject(0);
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryPengajuan.this);
+                            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                            View viewDialog = inflater.inflate(R.layout.layout_detail_pengajuan, null);
+                            builder.setView(viewDialog);
+                            builder.setCancelable(false);
+
+                            final ImageView ivClose = (ImageView) viewDialog.findViewById(R.id.iv_close);
+                            final TextView tvTanggal= (TextView) viewDialog.findViewById(R.id.tv_tanggal);
+                            final TextView tvPengaju = (TextView) viewDialog.findViewById(R.id.tv_pengaju);
+                            final TextView tvRekeningTujuan= (TextView) viewDialog.findViewById(R.id.tv_rekening_tujuan);
+                            final TextView tvNominal = (TextView) viewDialog.findViewById(R.id.tv_nominal);
+                            final TextView tvKeterangan = (TextView) viewDialog.findViewById(R.id.tv_keterangan);
+                            final TextView tvPembayaran= (TextView) viewDialog.findViewById(R.id.tv_tujuan_pembayaran);
+
+                            tvTanggal.setText(jo.getString("date"));
+                            tvPengaju.setText(jo.getString("pemohon"));
+                            tvRekeningTujuan.setText(jo.getString("rekening_tujuan"));
+                            tvNominal.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(jo.getString("nominal"))));
+                            tvKeterangan.setText(jo.getString("keterangan"));
+                            tvPembayaran.setText(jo.getString("tujuan_pembayaran"));
+
+                            final AlertDialog alert = builder.create();
+                            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                            ivClose.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view2) {
+
+                                    if(alert != null)
+                                    alert.dismiss();
+                                }
+                            });
+
+                            alert.show();
+                        }else{
+
+                            Toast.makeText(HistoryPengajuan.this, "Data tidak ditemukan", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+
+                        Toast.makeText(HistoryPengajuan.this, "Data tidak ditemukan", Toast.LENGTH_LONG).show();
+                    }
+
+                    pbLoading.setVisibility(View.GONE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    pbLoading.setVisibility(View.GONE);
+                    Toast.makeText(HistoryPengajuan.this, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                pbLoading.setVisibility(View.GONE);
+                Toast.makeText(HistoryPengajuan.this, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private AbsListView.OnScrollListener onScrollListener() {
@@ -206,6 +321,7 @@ public class HistoryPengajuan extends AppCompatActivity {
 
         try {
             /*jBody.put("keyword", edtSearch.getText().toString());*/
+            jBody.put("keyword", keyword);
             jBody.put("start", String.valueOf(startIndex));
             jBody.put("count", String.valueOf(count));
         } catch (JSONException e) {
@@ -227,7 +343,7 @@ public class HistoryPengajuan extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            moreList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("keterangan"), jo.getString("timestamp"),  jo.getString("urgent"), jo.getString("status")));
+                            moreList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("keterangan"), jo.getString("updated_time"),  jo.getString("urgent"), jo.getString("status"), jo.getString("reason"), jo.getString("nomor"), jo.getString("sumber")));
                         }
 
                         lvHistory.removeFooterView(footerList);
@@ -247,6 +363,58 @@ public class HistoryPengajuan extends AppCompatActivity {
                 lvHistory.removeFooterView(footerList);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        final SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String queryText) {
+
+                startIndex = 0;
+                keyword = queryText;
+                iv.hideSoftKey(HistoryPengajuan.this);
+                getHistory();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                String newFilter = !TextUtils.isEmpty(newText) ? newText : "";
+                if(newText.length() == 0){
+
+                    startIndex = 0;
+                    keyword = "";
+                    getHistory();
+                }
+
+                return true;
+            }
+        });
+
+        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+
+                return true;
+            }
+        };
+        MenuItemCompat.setOnActionExpandListener(searchItem, expandListener);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

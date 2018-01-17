@@ -4,30 +4,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_grey_blue"
     tools:context="gmedia.net.id.finance.DetailPengajuan.DetailPengajuan">
 
-    
-    <ListView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_footer"
+        android:orientation="horizontal"
+        android:layout_marginRight="@dimen/margin_default"
+        android:layout_marginLeft="@dimen/margin_default"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_alignParentBottom="true"
+        android:weightSum="2">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_left_blue"
+            android:text="Approve"
+            android:id="@+id/btn_approve"
+            android:textColor="@color/color_white"
+            android:gravity="center">
+        </Button>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_right_orange"
+            android:text="Reject"
+            android:id="@+id/btn_reject"
+            android:textColor="@color/color_white"
+            android:gravity="center">
+        </Button>
+    </LinearLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lv_pengajuan"
-        android:background="@color/color_grey_blue"></ListView>
+        android:layout_above="@id/ll_footer">
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pb_loading"
-        android:visibility="gone"
-        android:layout_centerInParent="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/color_black"
+            android:id="@+id/tv_total"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Refresh"
-        android:id="@+id/btn_refresh"
-        android:visibility="gone"
-        android:background="@drawable/ripple_selected"
-        android:drawableTop="@mipmap/ic_refresh"
-        />
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/tv_total"
+            android:id="@+id/lv_pengajuan"></ListView>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pb_loading"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Refresh"
+            android:id="@+id/btn_refresh"
+            android:visibility="gone"
+            android:background="@drawable/ripple_selected"
+            android:drawableTop="@mipmap/ic_refresh"
+            android:layout_marginLeft="@dimen/margin_small"/>
+    </RelativeLayout>
+
 </RelativeLayout>

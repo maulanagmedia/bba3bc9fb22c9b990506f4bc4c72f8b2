@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -847,6 +849,32 @@ public class ItemValidation {
             }
         }
         return false;
+    }
+
+    public String encodeBase64(String value){
+
+        String hasil = value;
+        try {
+            byte[] encodeValue = Base64.encode(value.getBytes(), Base64.DEFAULT);
+            hasil = new String(encodeValue);
+        }catch (Exception e){
+            e.printStackTrace();
+            hasil = "";
+        }
+        return hasil;
+    }
+
+    public String decodeBase64(String value){
+
+        String hasil = value;
+        try {
+            byte[] decodeValue = Base64.decode(value.getBytes(), Base64.DEFAULT);
+            hasil = new String(decodeValue);
+        }catch (Exception e){
+            hasil = "";
+        }
+
+        return hasil;
     }
 
 }

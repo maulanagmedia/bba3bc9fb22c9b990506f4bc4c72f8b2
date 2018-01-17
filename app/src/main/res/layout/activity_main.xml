@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.15"
+            android:layout_weight="0.11"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
@@ -27,13 +27,13 @@
                 android:id="@+id/iv_search"
                 android:scaleType="centerInside"
                 android:background="?attr/selectableItemBackground"
-                android:layout_marginLeft="@dimen/margin_default"
-                android:layout_marginRight="@dimen/margin_default"/>
+                android:layout_marginLeft="@dimen/margin_tiny"
+                android:layout_marginRight="@dimen/margin_tiny"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.7"
+            android:layout_weight="0.65"
             android:orientation="horizontal"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/margin_default"
@@ -68,10 +68,11 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.15"
+            android:layout_weight="0.12"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:padding="@dimen/margin_default">
+            android:padding="@dimen/margin_small"
+            android:layout_marginRight="@dimen/margin_tiny">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -80,8 +81,26 @@
                 android:scaleType="centerInside"
                 android:id="@+id/iv_history"
                 android:background="?attr/selectableItemBackground"
-                android:layout_marginLeft="@dimen/margin_small"
-                android:layout_marginRight="@dimen/margin_small"/>
+                android:layout_marginLeft="@dimen/margin_tiny"
+                android:layout_marginRight="@dimen/margin_tiny"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.12"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/margin_tiny">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_logout"
+                android:scaleType="centerInside"
+                android:id="@+id/iv_logout"
+                android:background="?attr/selectableItemBackground"
+                android:layout_marginLeft="@dimen/margin_tiny"
+                android:layout_marginRight="@dimen/margin_tiny"/>
         </LinearLayout>
 
     </LinearLayout>

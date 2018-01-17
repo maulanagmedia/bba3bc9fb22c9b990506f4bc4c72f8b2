@@ -27,7 +27,7 @@ public class ApiVolley {
 
     public static RequestQueue requestQueue;
 
-    public ApiVolley(final Context context, JSONObject jsonBody, String requestMethod, String REST_URL, final String successDialog, final String failDialog, final int showDialogFlag, final String user, final String pass , final VolleyCallback callback){
+    public ApiVolley(final Context context, JSONObject jsonBody, String requestMethod, String REST_URL, final String successDialog, final String failDialog, final int showDialogFlag, final String token1, final String token2, final VolleyCallback callback){
 
         /*
         NOTE: you have to customize this class before you use it (haeder, etc)
@@ -109,8 +109,8 @@ public class ApiVolley {
                 params.put("Content-Type", "application/json");
                 params.put("Client-Service", "frontend-client");
                 params.put("Auth-Key", "gmedia_finance");
-                params.put("user", user);
-                params.put("pass", pass);
+                params.put("Token1", token1);
+                params.put("Token2", token2);
                 return params;
             }
 
