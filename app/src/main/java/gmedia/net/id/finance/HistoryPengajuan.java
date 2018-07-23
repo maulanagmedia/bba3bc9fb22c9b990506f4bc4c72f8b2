@@ -310,7 +310,15 @@ public class HistoryPengajuan extends AppCompatActivity {
                         for(int i = 0; i < jsonArray.length(); i++){
 
                             JSONObject jo = jsonArray.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("keterangan"), jo.getString("updated_time"),  jo.getString("urgent"), jo.getString("status"), jo.getString("reason"), jo.getString("nomor"), jo.getString("sumber")));
+                            masterList.add(new CustomItem(jo.getString("id"),
+                                    jo.getString("nama"),
+                                    jo.getString("keterangan"),
+                                    jo.getString("updated_time"),
+                                    jo.getString("urgent"),
+                                    jo.getString("status"),
+                                    jo.getString("reason"),
+                                    jo.getString("nomor"),
+                                    iv.parseNullString(jo.getString("sumber"))));
                         }
                     }
 

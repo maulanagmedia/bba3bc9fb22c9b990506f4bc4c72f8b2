@@ -278,7 +278,14 @@ public class MainActivity extends AppCompatActivity {
                         for(int i = 0; i < jsonArray.length(); i++){
 
                             JSONObject jo = jsonArray.getJSONObject(i);
-                            masterList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("nomor"), jo.getString("keterangan"),  jo.getString("timestamp"), jo.getString("urgent"),jo.getString("flag"), jo.getString("sumber")));
+                            masterList.add(new CustomItem(jo.getString("id"),
+                                    jo.getString("nama"),
+                                    jo.getString("nomor"),
+                                    jo.getString("keterangan"),
+                                    jo.getString("timestamp"),
+                                    jo.getString("urgent"),
+                                    jo.getString("flag"),
+                                    iv.parseNullString(jo.getString("sumber"))));
                         }
                     }
 
