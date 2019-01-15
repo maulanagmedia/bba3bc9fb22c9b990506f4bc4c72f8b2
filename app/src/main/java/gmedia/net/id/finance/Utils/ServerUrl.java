@@ -17,4 +17,5 @@ public class ServerUrl {
     public static final String updateDetailPengajuan = baseURL + "mobilepengajuan/update_detail_pengajuan/";
     public static final String getHistory = baseURL + "mobilepengajuan/get_history/";
     public static final String getTahunHeader = baseURL + "mobilepengajuan/get_tahun_header/";
+    public static final String getBarangPO = baseURL + "mobilepengajuan/get_barang_po/";
 }

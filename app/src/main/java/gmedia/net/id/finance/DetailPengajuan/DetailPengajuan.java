@@ -144,6 +144,7 @@ public class DetailPengajuan extends AppCompatActivity {
         btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 LayoutInflater inflater = (LayoutInflater) ((Activity)context).getSystemService(LAYOUT_INFLATER_SERVICE);
                 View viewDialog = inflater.inflate(R.layout.layout_reject_reason, null);
@@ -212,6 +213,7 @@ public class DetailPengajuan extends AppCompatActivity {
                 try {
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
+                    String message = response.getJSONObject("metadata").getString("message");
                     listPengajuan = new ArrayList<>();
                     total = 0;
 
@@ -221,9 +223,22 @@ public class DetailPengajuan extends AppCompatActivity {
                         for(int i = 0; i < jsonArray.length(); i++){
 
                             JSONObject jo = jsonArray.getJSONObject(i);
-                            listPengajuan.add(new CustomItem(jo.getString("id"), jo.getString("pemohon"), jo.getString("rekening_tujuan"), jo.getString("nominal"),  jo.getString("keterangan"), jo.getString("tujuan_pembayaran"),jo.getString("date")));
+                            listPengajuan.add(new CustomItem(
+                                    jo.getString("id")
+                                    ,jo.getString("pemohon")
+                                    ,jo.getString("rekening_tujuan")
+                                    ,jo.getString("nominal")
+                                    ,jo.getString("keterangan")
+                                    ,jo.getString("tujuan_pembayaran")
+                                    ,jo.getString("date")
+                                    ,jo.getString("id_po")
+                            ));
+
                             total += iv.parseNullDouble(jo.getString("nominal"));
                         }
+                    }else{
+
+                        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                     }
 
                     setDetailPengajuanAdapter(listPengajuan);

@@ -3,6 +3,7 @@ package gmedia.net.id.finance.DetailPengajuan.Adapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.maulana.custommodul.ItemValidation;
 import java.util.List;
 
 import gmedia.net.id.finance.DetailPengajuan.DetailPengajuan;
+import gmedia.net.id.finance.DetailPengajuan.ListBarangPengajuan;
 import gmedia.net.id.finance.R;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -45,7 +48,8 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
 
     private static class ViewHolder {
         private TextView tvTanggal, tvPengaju, tvRekeningTujuan, tvNominal, tvKeterangan, tvTujuanPembayaran;
-        private Button btnApprove, btnReject;
+        private Button btnApprove, btnReject, btnLihatDetail;
+        private LinearLayout llPo;
     }
 
     public void addMoreData(List<CustomItem> moreData){
@@ -70,6 +74,7 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             convertView = inflater.inflate(R.layout.adapter_detail_pengajuan, null);
 
+            holder.llPo = (LinearLayout) convertView.findViewById(R.id.ll_po);
             holder.tvTanggal = (TextView) convertView.findViewById(R.id.tv_tanggal);
             holder.tvPengaju = (TextView) convertView.findViewById(R.id.tv_pengaju);
             holder.tvRekeningTujuan = (TextView) convertView.findViewById(R.id.tv_rekening_tujuan);
@@ -77,6 +82,7 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
             holder.tvKeterangan = (TextView) convertView.findViewById(R.id.tv_keterangan);
             holder.tvTujuanPembayaran = (TextView) convertView.findViewById(R.id.tv_tujuan_pembayaran);
 
+            holder.btnLihatDetail = (Button) convertView.findViewById(R.id.btn_lihat_detail);
             holder.btnApprove = (Button) convertView.findViewById(R.id.btn_approve);
             holder.btnReject = (Button) convertView.findViewById(R.id.btn_reject);
 
@@ -93,6 +99,23 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
         holder.tvKeterangan.setText(itemSelected.getItem5());
         holder.tvTujuanPembayaran.setText(itemSelected.getItem6());
         holder.tvTanggal.setText(itemSelected.getItem7());
+
+        if(itemSelected.getItem8().equals("0")){
+
+            holder.llPo.setVisibility(View.GONE);
+        }else{
+            holder.llPo.setVisibility(View.VISIBLE);
+
+            holder.btnLihatDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent(context, ListBarangPengajuan.class);
+                    intent.putExtra("id", itemSelected.getItem8());
+                    ((Activity) context).startActivity(intent);
+                }
+            });
+        }
 
         holder.btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override

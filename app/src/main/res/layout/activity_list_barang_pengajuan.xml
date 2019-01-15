@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailPengajuan.ListBarangPengajuan">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_header"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/margin_default">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No. Purchase Order"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/title_size1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_po"
+            android:textStyle="bold"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/text_normal"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order To"
+            android:layout_marginTop="@dimen/margin_tiny"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/title_size1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_order_to"
+            android:textStyle="bold"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/text_normal"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_footer"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_default"
+        android:background="@color/colorPrimary">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_small"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Subtotal"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/title_size1"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_subtotal"
+                    android:gravity="right"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/text_normal"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PPN"
+                    android:layout_marginTop="@dimen/margin_tiny"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/title_size1"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_ppn"
+                    android:textStyle="bold"
+                    android:gravity="right"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/text_normal"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_small"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Diskon"
+                    android:layout_marginTop="@dimen/margin_tiny"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/title_size1"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_diskon"
+                    android:textStyle="bold"
+                    android:gravity="right"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/text_normal"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ongkir"
+                    android:layout_marginTop="@dimen/margin_tiny"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/title_size1"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_ongkir"
+                    android:textStyle="bold"
+                    android:gravity="right"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/text_normal"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total"
+            android:layout_marginTop="@dimen/margin_tiny"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/title_size1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_total"
+            android:textStyle="bold"
+            android:text=""
+            android:gravity="right"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/text_normal"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:layout_above="@id/rl_footer"
+        android:layout_below="@id/rl_header"
+        android:paddingTop="@dimen/margin_default"
+        android:paddingBottom="@dimen/margin_default"
+        android:id="@+id/lv_barang"></ListView>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/pb_loading"
+        android:visibility="gone"/>
+
+</RelativeLayout>

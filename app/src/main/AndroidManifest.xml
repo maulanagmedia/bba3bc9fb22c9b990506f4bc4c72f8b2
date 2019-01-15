@@ -55,14 +55,17 @@
             android:theme="@style/AppTheme.TitleOnly">
             <intent-filter>
                 <action android:name="ACT_MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".HistoryPengajuan"
             android:screenOrientation="portrait" />
-        <activity android:name=".DetailPengajuan.DetailPengajuan"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".DetailPengajuan.DetailPengajuan"
+            android:screenOrientation="portrait" />
+        <activity android:name=".DetailPengajuan.ListBarangPengajuan"></activity>
     </application>
 
 </manifest>

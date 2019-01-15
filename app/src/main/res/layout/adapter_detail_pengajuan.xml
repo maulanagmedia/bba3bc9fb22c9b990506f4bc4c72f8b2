@@ -117,6 +117,30 @@
                 android:textColor="@color/color_black"
                 android:id="@+id/tv_tujuan_pembayaran"
                 android:textSize="@dimen/value_size"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ll_header"
+                android:orientation="horizontal"
+                android:id="@+id/ll_po"
+                android:layout_marginTop="@dimen/margin_default"
+                android:visibility="gone"
+                android:gravity="center"
+                android:weightSum="2">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="1.3"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_blue"
+                    android:text=" Lihat Detail Barang "
+                    android:id="@+id/btn_lihat_detail"
+                    android:textColor="@color/color_white"
+                    android:gravity="center">
+                </Button>
+            </LinearLayout>
+
         </LinearLayout>
         
         <LinearLayout
