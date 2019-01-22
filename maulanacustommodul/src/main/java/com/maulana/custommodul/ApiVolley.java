@@ -110,7 +110,7 @@ public class ApiVolley {
                 params.put("Client-Service", "frontend-client");
                 params.put("Auth-Key", "gmedia_finance");
                 params.put("Token1", token1);
-                params.put("Token2", token2);
+                params.put("Token2", token2.trim());
                 return params;
             }
 
