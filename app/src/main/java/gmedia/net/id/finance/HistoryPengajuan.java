@@ -502,7 +502,7 @@ public class HistoryPengajuan extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(HistoryPengajuan.this, jBody, "POST", ServerUrl.getPengajuan, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+        ApiVolley request = new ApiVolley(HistoryPengajuan.this, jBody, "POST", ServerUrl.getHistory, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
@@ -517,7 +517,15 @@ public class HistoryPengajuan extends AppCompatActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            moreList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("keterangan"), jo.getString("updated_time"),  jo.getString("urgent"), jo.getString("status"), jo.getString("reason"), jo.getString("nomor"), jo.getString("sumber")));
+                            moreList.add(new CustomItem(jo.getString("id")
+                                    , jo.getString("nama")
+                                    , jo.getString("keterangan")
+                                    , jo.getString("updated_time")
+                                    ,  jo.getString("urgent")
+                                    , jo.getString("status")
+                                    , jo.getString("reason")
+                                    , jo.getString("nomor")
+                                    , jo.getString("sumber")));
                         }
 
                         lvHistory.removeFooterView(footerList);
