@@ -2,6 +2,7 @@ package gmedia.net.id.finance;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.MenuItemCompat;
@@ -45,6 +46,7 @@ import gmedia.net.id.finance.Utils.ServerUrl;
 
 public class HistoryPengajuan extends AppCompatActivity {
 
+    private Context context;
     private ListView lvHistory;
     private ProgressBar pbLoading;
     private Button btnRefresh;
@@ -74,7 +76,7 @@ public class HistoryPengajuan extends AppCompatActivity {
         );
 
         setTitle("History");
-
+        context = this;
         initUI();
     }
 
@@ -318,7 +320,7 @@ public class HistoryPengajuan extends AppCompatActivity {
                                     jo.getString("status"),
                                     jo.getString("reason"),
                                     jo.getString("nomor"),
-                                    iv.parseNullString(jo.getString("sumber"))));
+                                    iv.parseNullString(jo.getString("sumber")).toString().toLowerCase()));
                         }
                     }
 
@@ -371,89 +373,91 @@ public class HistoryPengajuan extends AppCompatActivity {
                     //getDetailPengajuan(item.getItem1());
                 }
             });
+
+            lvHistory.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    final CustomItem item = (CustomItem) adapterView.getItemAtPosition(i);
+
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setTitle("Konfirmasi")
+                            .setMessage("Apakah anda yakin ingin membatalkan putusan pengajuan "+item.getItem3()+" ?")
+                            .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    batalkanPengajuan(item.getItem1());
+                                }
+                            })
+                            .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .show();
+
+                    return true;
+                }
+            });
         }
     }
 
-    private void getDetailPengajuan(String id){
+    private void batalkanPengajuan(final String id) {
 
         pbLoading.setVisibility(View.VISIBLE);
+        JSONObject jData = new JSONObject();
 
-        JSONObject jBody = new JSONObject();
         try {
-            jBody.put("id_header", "");
+            jData.put("status", "0");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        ApiVolley request = new ApiVolley(HistoryPengajuan.this, jBody, "POST", ServerUrl.getDetailPengajuan+id, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
+        JSONObject jBody = new JSONObject();
+
+        try {
+            jBody.put("id", id);
+            jBody.put("data", jData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiVolley request = new ApiVolley(context, jBody, "POST", ServerUrl.updatePengajuan, "", "", 0, session.getUsername(), session.getPassword(), new ApiVolley.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
 
+                String message = "Terjadi kesalahan saat mengakses data";
                 try {
+
+                    pbLoading.setVisibility(View.GONE);
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
+                    message = response.getJSONObject("metadata").getString("message");
 
                     if(iv.parseNullInteger(status) == 200){
 
-                        JSONArray jsonArray = response.getJSONArray("response");
-                        if(jsonArray.length() > 0){
-
-                            JSONObject jo = jsonArray.getJSONObject(0);
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryPengajuan.this);
-                            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                            View viewDialog = inflater.inflate(R.layout.layout_detail_pengajuan, null);
-                            builder.setView(viewDialog);
-                            builder.setCancelable(false);
-
-                            final ImageView ivClose = (ImageView) viewDialog.findViewById(R.id.iv_close);
-                            final TextView tvTanggal= (TextView) viewDialog.findViewById(R.id.tv_tanggal);
-                            final TextView tvPengaju = (TextView) viewDialog.findViewById(R.id.tv_pengaju);
-                            final TextView tvRekeningTujuan= (TextView) viewDialog.findViewById(R.id.tv_rekening_tujuan);
-                            final TextView tvNominal = (TextView) viewDialog.findViewById(R.id.tv_nominal);
-                            final TextView tvKeterangan = (TextView) viewDialog.findViewById(R.id.tv_keterangan);
-                            final TextView tvPembayaran= (TextView) viewDialog.findViewById(R.id.tv_tujuan_pembayaran);
-
-                            tvTanggal.setText(jo.getString("date"));
-                            tvPengaju.setText(jo.getString("pemohon"));
-                            tvRekeningTujuan.setText(jo.getString("rekening_tujuan"));
-                            tvNominal.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(jo.getString("nominal"))));
-                            tvKeterangan.setText(jo.getString("keterangan"));
-                            tvPembayaran.setText(jo.getString("tujuan_pembayaran"));
-
-                            final AlertDialog alert = builder.create();
-                            alert.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-                            ivClose.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view2) {
-
-                                    if(alert != null)
-                                    alert.dismiss();
-                                }
-                            });
-
-                            alert.show();
-                        }else{
-
-                            Toast.makeText(HistoryPengajuan.this, "Data tidak ditemukan", Toast.LENGTH_LONG).show();
-                        }
+                        message = response.getJSONObject("response").getString("message");
+                        getHistory();
+                        //onBackPressed();
                     }else{
-
-                        Toast.makeText(HistoryPengajuan.this, "Data tidak ditemukan", Toast.LENGTH_LONG).show();
+                        message = "Data tidak tersimpan";
                     }
 
-                    pbLoading.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     pbLoading.setVisibility(View.GONE);
-                    Toast.makeText(HistoryPengajuan.this, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
                 }
+
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(String result) {
+
                 pbLoading.setVisibility(View.GONE);
-                Toast.makeText(HistoryPengajuan.this, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Terjadi kesalahan saat mengases data", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -525,7 +529,7 @@ public class HistoryPengajuan extends AppCompatActivity {
                                     , jo.getString("status")
                                     , jo.getString("reason")
                                     , jo.getString("nomor")
-                                    , jo.getString("sumber")));
+                                    , iv.parseNullString(jo.getString("sumber"))));
                         }
 
                         lvHistory.removeFooterView(footerList);

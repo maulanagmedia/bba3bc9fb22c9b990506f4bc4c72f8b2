@@ -52,6 +52,7 @@
                 android:text="Tahun"
                 android:textColor="@color/color_white"
                 android:textSize="@dimen/title_size"/>
+
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,11 +61,21 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_black"
+        android:text="* Tahan lama pada list untuk melakukan pembatalan"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/margin_default"
+        android:id="@+id/tv_footer"/>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_below="@id/ll_head"
         android:layout_height="match_parent"
         android:divider="@null"
+        android:layout_above="@id/tv_footer"
         android:paddingTop="@dimen/margin_default"
         android:paddingBottom="@dimen/margin_default"
         android:id="@+id/lv_history"></ListView>

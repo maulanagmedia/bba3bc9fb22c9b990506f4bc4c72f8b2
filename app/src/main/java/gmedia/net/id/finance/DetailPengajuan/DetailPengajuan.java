@@ -232,6 +232,8 @@ public class DetailPengajuan extends AppCompatActivity {
                                     ,jo.getString("tujuan_pembayaran")
                                     ,jo.getString("date")
                                     ,jo.getString("id_po")
+                                    ,jo.getString("bukti")
+                                    ,jo.getString("link")
                             ));
 
                             total += iv.parseNullDouble(jo.getString("nominal"));
