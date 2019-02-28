@@ -232,8 +232,8 @@ public class DetailPengajuan extends AppCompatActivity {
                                     ,jo.getString("tujuan_pembayaran")
                                     ,jo.getString("date")
                                     ,jo.getString("id_po")
-                                    ,"sdfsdf"
-                                    ,"https://mandachioblog.files.wordpress.com/2012/12/screen-capture-9-blur.png"
+                                    ,jo.getString("bukti")
+                                    ,jo.getString("link")
                             ));
 
                             total += iv.parseNullDouble(jo.getString("nominal"));
