@@ -2,9 +2,15 @@ package gmedia.net.id.finance.DetailPengajuan.Adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +27,13 @@ import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.FormatItem;
 import com.maulana.custommodul.ItemValidation;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 import gmedia.net.id.finance.DetailPengajuan.DetailPengajuan;
@@ -39,6 +52,7 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
     private Activity context;
     private List<CustomItem> items;
     private ItemValidation iv = new ItemValidation();
+    private ProgressDialog progressDialog;
 
     public DetailPengajuanAdapter(Activity context, List<CustomItem> items) {
         super(context, R.layout.adapter_detail_pengajuan, items);
@@ -48,7 +62,7 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
 
     private static class ViewHolder {
         private TextView tvTanggal, tvPengaju, tvRekeningTujuan, tvNominal, tvKeterangan, tvTujuanPembayaran;
-        private Button btnApprove, btnReject, btnLihatDetail;
+        private Button btnApprove, btnReject, btnLihatDetail, btnLihatBukti;
         private LinearLayout llPo;
     }
 
@@ -83,6 +97,7 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
             holder.tvTujuanPembayaran = (TextView) convertView.findViewById(R.id.tv_tujuan_pembayaran);
 
             holder.btnLihatDetail = (Button) convertView.findViewById(R.id.btn_lihat_detail);
+            holder.btnLihatBukti = (Button) convertView.findViewById(R.id.btn_lihat_bukti);
             holder.btnApprove = (Button) convertView.findViewById(R.id.btn_approve);
             holder.btnReject = (Button) convertView.findViewById(R.id.btn_reject);
 
@@ -102,9 +117,9 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
 
         if(itemSelected.getItem8().equals("0")){
 
-            holder.llPo.setVisibility(View.GONE);
+            holder.btnLihatDetail.setVisibility(View.GONE);
         }else{
-            holder.llPo.setVisibility(View.VISIBLE);
+            holder.btnLihatDetail.setVisibility(View.VISIBLE);
 
             holder.btnLihatDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,6 +128,20 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
                     Intent intent = new Intent(context, ListBarangPengajuan.class);
                     intent.putExtra("id", itemSelected.getItem8());
                     ((Activity) context).startActivity(intent);
+                }
+            });
+        }
+
+        if(itemSelected.getItem9().isEmpty()){
+
+            holder.btnLihatBukti.setVisibility(View.GONE);
+        }else{
+            holder.btnLihatBukti.setVisibility(View.VISIBLE);
+            holder.btnLihatBukti.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    new DownloadFileFromURL().execute(itemSelected.getItem10());
                 }
             });
         }
@@ -189,5 +218,111 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
         });
 
         return convertView;
+    }
+
+    class DownloadFileFromURL extends AsyncTask<String, String, String> {
+
+        private File f;
+
+        /**
+         * Before starting background thread
+         * Show Progress Bar Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showDialog();
+        }
+
+        /**
+         * Downloading file in background thread
+         * */
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+                // this will be useful so that you can show a tipical 0-100% progress bar
+                int lenghtOfFile = conection.getContentLength();
+
+                // download the file
+                f = new File(Environment.getExternalStorageDirectory() + File.separator + "downloadedfile.jpg");
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+
+                // Output stream
+                OutputStream output = new FileOutputStream("/sdcard/downloadedfile.jpg");
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress(""+(int)((total*100)/lenghtOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+
+            return null;
+        }
+
+        /**
+         * Updating progress bar
+         * */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+            progressDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+        /**
+         * After completing background task
+         * Dismiss the progress dialog
+         * **/
+        @Override
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after the file was downloaded
+            dismissDialog();
+
+            // Displaying downloaded image into image view
+            // Reading image path from sdcard
+            if(f != null){
+                String imagePath = String.valueOf(FileProvider.getUriForFile(context, context.getPackageName() + ".provider", f));
+                // setting downloaded into image view
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(imagePath), "image/*");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                context.startActivity(intent);
+            }
+        }
+        private void showDialog(){
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Downloading file. Please wait...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setMax(100);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
+
+        private void dismissDialog(){
+            progressDialog.dismiss();
+        }
     }
 }

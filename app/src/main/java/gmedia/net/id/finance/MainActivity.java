@@ -1,11 +1,14 @@
 package gmedia.net.id.finance;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,6 +38,7 @@ import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
 import com.maulana.custommodul.FormatItem;
 import com.maulana.custommodul.ItemValidation;
+import com.maulana.custommodul.RuntimePermissionsActivity;
 import com.maulana.custommodul.SessionManager;
 
 import org.json.JSONArray;
@@ -48,12 +52,13 @@ import gmedia.net.id.finance.Adapter.ListPengajuanAdapter;
 import gmedia.net.id.finance.DetailPengajuan.DetailPengajuan;
 import gmedia.net.id.finance.Utils.ServerUrl;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends RuntimePermissionsActivity {
 
     private static boolean doubleBackToExitPressedOnce;
     private boolean exitState = false;
     private int timerClose = 2000;
 
+    private static final int REQUEST_PERMISSIONS = 20;
     private static ListView lvPengajuan;
     private static List<CustomItem> masterList;
     private static ProgressBar pbLoading;
@@ -89,6 +94,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // for android > M
+        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED){
+
+            MainActivity.super.requestAppPermissions(new
+                            String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            android.Manifest.permission.WAKE_LOCK}, R.string
+                            .runtime_permissions_txt
+                    , REQUEST_PERMISSIONS);
+        }
+
         session = new SessionManager(this);
 
         if(!session.isLogin()){
@@ -100,6 +118,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         initUI();
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode) {
+
     }
 
     private void initUI() {

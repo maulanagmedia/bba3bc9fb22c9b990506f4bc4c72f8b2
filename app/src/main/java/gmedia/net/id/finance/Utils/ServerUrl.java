@@ -6,8 +6,9 @@ package gmedia.net.id.finance.Utils;
 
 public class ServerUrl {
 
-    //private static final String baseURL = "http://erpsmg.gmedia.id/pengajuan/";
-    private static final String baseURL = "http://192.168.20.61/pengajuan/";
+    private static final String baseURL = "http://erpsmg.gmedia.id/pengajuan/";
+    //private static final String baseURL = "http://192.168.20.61/pengajuan/";
+    //private static final String baseURL = "http://192.168.20.65/gmedia_finance/api/";
 
     public static final String login = baseURL + "mobileauth/login/";
 
