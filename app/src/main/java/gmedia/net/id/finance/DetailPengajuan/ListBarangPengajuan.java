@@ -129,6 +129,8 @@ public class ListBarangPengajuan extends AppCompatActivity {
                                     ,jo.getString("nama_ukuran")
                                     ,jo.getString("harga")
                                     ,jo.getString("total")
+                                    ,jo.getString("keperluan")
+                                    ,jo.getString("keterangan")
                             ));
 
                         }

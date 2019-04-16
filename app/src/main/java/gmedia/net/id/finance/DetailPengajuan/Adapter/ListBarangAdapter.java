@@ -44,7 +44,7 @@ public class ListBarangAdapter extends ArrayAdapter{
     }
 
     private static class ViewHolder {
-        private TextView tvItem0, tvItem1, tvItem2, tvItem3;
+        private TextView tvItem0, tvItem1, tvItem2, tvItem3, tvItem4, tvItem5;
     }
 
     public void addMoreData(List<CustomItem> moreData){
@@ -73,6 +73,8 @@ public class ListBarangAdapter extends ArrayAdapter{
             holder.tvItem1 = (TextView) convertView.findViewById(R.id.tv_item1);
             holder.tvItem2 = (TextView) convertView.findViewById(R.id.tv_item2);
             holder.tvItem3 = (TextView) convertView.findViewById(R.id.tv_item3);
+            holder.tvItem4 = (TextView) convertView.findViewById(R.id.tv_item4);
+            holder.tvItem5 = (TextView) convertView.findViewById(R.id.tv_item5);
 
             convertView.setTag(holder);
         }else{
@@ -85,6 +87,8 @@ public class ListBarangAdapter extends ArrayAdapter{
         holder.tvItem1.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem3()) + " " + itemSelected.getItem4());
         holder.tvItem2.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem5())));
         holder.tvItem3.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem6())));
+        holder.tvItem4.setText(itemSelected.getItem7());
+        holder.tvItem5.setText(itemSelected.getItem8());
 
         return convertView;
     }

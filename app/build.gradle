@@ -1,13 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'gmedia_keystore'
+            keyPassword 'berhasil'
+            storeFile file('/Users/gmediaiosdev2/Library/Mobile Documents/com~apple~CloudDocs/Documents/Android/AndroidProject/keystore_gmedia.jks')
+            storePassword 'berhasil'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "gmedia.net.id.finance"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 2
-        versionName "1.1.0"
+        versionCode 3
+        versionName "1.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
