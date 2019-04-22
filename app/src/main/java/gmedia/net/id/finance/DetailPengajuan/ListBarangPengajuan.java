@@ -111,11 +111,12 @@ public class ListBarangPengajuan extends AppCompatActivity {
                         JSONObject jHeader = jResponse.getJSONObject("header");
                         tvPo.setText(jHeader.getString("nomor"));
                         tvOrderTo.setText(jHeader.getString("perusahaan"));
-                        tvSubtotal.setText(iv.ChangeToCurrencyFormat(jHeader.getString("subtotal")));
-                        tvPPn.setText(iv.ChangeToCurrencyFormat(jHeader.getString("ppn")));
-                        tvDiskon.setText(iv.ChangeToCurrencyFormat(jHeader.getString("diskon")));
-                        tvOngkir.setText(iv.ChangeToCurrencyFormat(jHeader.getString("ongkir")));
-                        tvTotal.setText(iv.ChangeToCurrencyFormat(jHeader.getString("total")));
+                        String symbol = jHeader.getString("symbol");
+                        tvSubtotal.setText(symbol + " " + iv.ChangeToCurrencyFormat(jHeader.getString("subtotal")));
+                        tvPPn.setText(symbol + " " + iv.ChangeToCurrencyFormat(jHeader.getString("ppn")));
+                        tvDiskon.setText(symbol + " " + iv.ChangeToCurrencyFormat(jHeader.getString("diskon")));
+                        tvOngkir.setText(symbol + " " + iv.ChangeToCurrencyFormat(jHeader.getString("ongkir")));
+                        tvTotal.setText(symbol + " " + iv.ChangeToCurrencyFormat(jHeader.getString("total")));
 
                         JSONArray jsonArray = jResponse.getJSONArray("detail");
 
@@ -131,6 +132,7 @@ public class ListBarangPengajuan extends AppCompatActivity {
                                     ,jo.getString("total")
                                     ,jo.getString("keperluan")
                                     ,jo.getString("keterangan")
+                                    ,jo.getString("symbol")
                             ));
 
                         }

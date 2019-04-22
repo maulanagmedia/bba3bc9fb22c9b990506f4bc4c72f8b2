@@ -85,8 +85,8 @@ public class ListBarangAdapter extends ArrayAdapter{
 
         holder.tvItem0.setText(itemSelected.getItem2());
         holder.tvItem1.setText(iv.ChangeToCurrencyFormat(itemSelected.getItem3()) + " " + itemSelected.getItem4());
-        holder.tvItem2.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem5())));
-        holder.tvItem3.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem6())));
+        holder.tvItem2.setText(itemSelected.getItem9() +  " " + iv.ChangeToCurrencyFormat(itemSelected.getItem5()));
+        holder.tvItem3.setText(itemSelected.getItem9() +  " " + iv.ChangeToCurrencyFormat(itemSelected.getItem6()));
         holder.tvItem4.setText(itemSelected.getItem7());
         holder.tvItem5.setText(itemSelected.getItem8());
 

@@ -308,7 +308,9 @@ public class MainActivity extends RuntimePermissionsActivity {
                                     jo.getString("timestamp"),
                                     jo.getString("urgent"),
                                     jo.getString("flag"),
-                                    iv.parseNullString(jo.getString("sumber"))));
+                                    iv.parseNullString(jo.getString("sumber")),
+                                    jo.getString("symbol")
+                            ));
                         }
                     }
 
@@ -365,10 +367,10 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 int threshold = 1;
-                int count = lvPengajuan.getCount();
+                int countList = lvPengajuan.getCount();
 
                 if (scrollState == SCROLL_STATE_IDLE) {
-                    if (lvPengajuan.getLastVisiblePosition() >= count - threshold && !isLoading) {
+                    if (lvPengajuan.getLastVisiblePosition() >= countList - threshold && !isLoading) {
 
                         isLoading = true;
                         lvPengajuan.addFooterView(footerList);
@@ -415,7 +417,16 @@ public class MainActivity extends RuntimePermissionsActivity {
                         for(int i  = 0; i < items.length(); i++){
 
                             JSONObject jo = items.getJSONObject(i);
-                            moreList.add(new CustomItem(jo.getString("id"), jo.getString("nama"), jo.getString("nomor"), jo.getString("keterangan"),  jo.getString("timestamp"), jo.getString("urgent"),jo.getString("flag"), jo.getString("sumber")));
+                            moreList.add(new CustomItem(jo.getString("id")
+                                    , jo.getString("nama")
+                                    , jo.getString("nomor")
+                                    , jo.getString("keterangan")
+                                    , jo.getString("timestamp")
+                                    , jo.getString("urgent")
+                                    , jo.getString("flag")
+                                    , iv.parseNullString(jo.getString("sumber"))
+                                    , jo.getString("symbol")
+                            ));
                         }
 
                         lvPengajuan.removeFooterView(footerList);

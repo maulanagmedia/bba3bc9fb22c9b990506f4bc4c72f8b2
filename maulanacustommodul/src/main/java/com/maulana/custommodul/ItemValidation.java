@@ -484,6 +484,32 @@ public class ItemValidation {
         return hasil;
     }
 
+    public String ChangeToCurrencyFormat(Double number){
+
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        DecimalFormatSymbols symbols = ((DecimalFormat) format).getDecimalFormatSymbols();
+
+        symbols.setCurrencySymbol("");
+        ((DecimalFormat) format).setDecimalFormatSymbols(symbols);
+        format.setMaximumFractionDigits(0);
+
+        String hasil = String.valueOf(format.format(number));
+
+        /*String stringConvert = "0";
+        try {
+            stringConvert = format.format(1000);
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+        }
+
+
+        if(!stringConvert.contains(",")){
+            hasil += ",00";
+        }*/
+
+        return hasil;
+    }
+
     public String ChangeToRupiahFormat(String number){
 
         double value = parseNullDouble(number);

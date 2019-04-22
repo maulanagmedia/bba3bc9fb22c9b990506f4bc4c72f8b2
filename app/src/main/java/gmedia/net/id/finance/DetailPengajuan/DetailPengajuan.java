@@ -82,7 +82,7 @@ public class DetailPengajuan extends AppCompatActivity {
         btnApprove = (Button) findViewById(R.id.btn_approve);
         btnReject = (Button) findViewById(R.id.btn_reject);
         llFooter = (LinearLayout) findViewById(R.id.ll_footer);
-        tvTotal.setText("Total: " + iv.ChangeToRupiahFormat(total));
+        tvTotal.setText("Total: " + iv.ChangeToCurrencyFormat(total));
 
         session = new SessionManager(context);
         Bundle bundle = getIntent().getExtras();
@@ -210,6 +210,8 @@ public class DetailPengajuan extends AppCompatActivity {
             @Override
             public void onSuccess(String result) {
 
+                String currentSymbol = "";
+
                 try {
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
@@ -234,9 +236,11 @@ public class DetailPengajuan extends AppCompatActivity {
                                     ,jo.getString("id_po")
                                     ,jo.getString("bukti")
                                     ,jo.getString("link")
+                                    ,jo.getString("symbol")
                             ));
 
                             total += iv.parseNullDouble(jo.getString("nominal"));
+                            currentSymbol = jo.getString("symbol");
                         }
                     }else{
 
@@ -246,7 +250,7 @@ public class DetailPengajuan extends AppCompatActivity {
                     setDetailPengajuanAdapter(listPengajuan);
                     pbLoading.setVisibility(View.GONE);
                     btnRefresh.setVisibility(View.GONE);
-                    tvTotal.setText("Total: " + iv.ChangeToRupiahFormat(total));
+                    tvTotal.setText("Total: " + currentSymbol + " " + iv.ChangeToCurrencyFormat(total));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     setDetailPengajuanAdapter(null);

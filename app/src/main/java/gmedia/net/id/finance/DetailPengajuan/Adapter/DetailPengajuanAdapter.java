@@ -110,7 +110,7 @@ public class DetailPengajuanAdapter extends ArrayAdapter{
 
         holder.tvPengaju.setText(itemSelected.getItem2());
         holder.tvRekeningTujuan.setText(itemSelected.getItem3());
-        holder.tvNominal.setText(iv.ChangeToRupiahFormat(iv.parseNullDouble(itemSelected.getItem4())));
+        holder.tvNominal.setText(itemSelected.getItem11() + " " + iv.ChangeToCurrencyFormat(itemSelected.getItem4()));
         holder.tvKeterangan.setText(itemSelected.getItem5());
         holder.tvTujuanPembayaran.setText(itemSelected.getItem6());
         holder.tvTanggal.setText(itemSelected.getItem7());

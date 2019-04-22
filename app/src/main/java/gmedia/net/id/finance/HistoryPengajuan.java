@@ -188,7 +188,10 @@ public class HistoryPengajuan extends AppCompatActivity {
 
                 if(spBulan.getAdapter() != null && spTahun.getAdapter() != null){
 
-                    ((TextView) spBulan.getSelectedView()).setTextColor(getResources().getColor(R.color.color_white));
+                    if(spBulan.getSelectedView() != null){
+
+                        ((TextView) spBulan.getSelectedView()).setTextColor(getResources().getColor(R.color.color_white));
+                    }
                     bulanNow = String.valueOf(position+1);
                     startIndex = 0;
                     getHistory();
@@ -284,6 +287,7 @@ public class HistoryPengajuan extends AppCompatActivity {
         startIndex = 0;
         pbLoading.setVisibility(View.VISIBLE);
         masterList = new ArrayList<>();
+        isLoading = true;
 
         JSONObject jBody = new JSONObject();
         try {
@@ -301,6 +305,7 @@ public class HistoryPengajuan extends AppCompatActivity {
             @Override
             public void onSuccess(String result) {
 
+                isLoading = false;
                 try {
                     JSONObject response = new JSONObject(result);
                     String status = response.getJSONObject("metadata").getString("status");
@@ -338,6 +343,7 @@ public class HistoryPengajuan extends AppCompatActivity {
 
             @Override
             public void onError(String result) {
+                isLoading = false;
                 setPengajuanAdapter(null);
                 pbLoading.setVisibility(View.GONE);
                 Toast.makeText(HistoryPengajuan.this, "Terjadi kesalahan saat memuat data", Toast.LENGTH_LONG).show();
@@ -468,10 +474,10 @@ public class HistoryPengajuan extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 int threshold = 1;
-                int count = lvHistory.getCount();
+                int countList = lvHistory.getCount();
 
                 if (scrollState == SCROLL_STATE_IDLE) {
-                    if (lvHistory.getLastVisiblePosition() >= count - threshold && !isLoading) {
+                    if (lvHistory.getLastVisiblePosition() >= countList - threshold && !isLoading) {
 
                         isLoading = true;
                         lvHistory.addFooterView(footerList);
@@ -510,6 +516,7 @@ public class HistoryPengajuan extends AppCompatActivity {
             @Override
             public void onSuccess(String result) {
 
+                isLoading = false;
                 try {
 
                     JSONObject response = new JSONObject(result);
@@ -535,10 +542,9 @@ public class HistoryPengajuan extends AppCompatActivity {
                         lvHistory.removeFooterView(footerList);
                         if(historyAdapter!= null) historyAdapter.addMoreData(moreList);
                     }
-                    isLoading = false;
+
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    isLoading = false;
                     lvHistory.removeFooterView(footerList);
                 }
             }
