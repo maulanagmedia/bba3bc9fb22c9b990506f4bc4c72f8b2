@@ -4,12 +4,12 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.core.view.MenuItemCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +20,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -40,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gmedia.net.id.finance.Adapter.ListHistoryAdapter;
-import gmedia.net.id.finance.Adapter.ListPengajuanAdapter;
 import gmedia.net.id.finance.DetailPengajuan.DetailPengajuan;
 import gmedia.net.id.finance.Utils.ServerUrl;
 
@@ -325,7 +323,9 @@ public class HistoryPengajuan extends AppCompatActivity {
                                     jo.getString("status"),
                                     jo.getString("reason"),
                                     jo.getString("nomor"),
-                                    iv.parseNullString(jo.getString("sumber")).toString().toLowerCase()));
+                                    iv.parseNullString(jo.getString("sumber")).toString().toLowerCase(),
+                                    jo.getString("title")
+                            ));
                         }
                     }
 
@@ -536,7 +536,9 @@ public class HistoryPengajuan extends AppCompatActivity {
                                     , jo.getString("status")
                                     , jo.getString("reason")
                                     , jo.getString("nomor")
-                                    , iv.parseNullString(jo.getString("sumber"))));
+                                    , iv.parseNullString(jo.getString("sumber"))
+                                    , jo.getString("title")
+                            ));
                         }
 
                         lvHistory.removeFooterView(footerList);

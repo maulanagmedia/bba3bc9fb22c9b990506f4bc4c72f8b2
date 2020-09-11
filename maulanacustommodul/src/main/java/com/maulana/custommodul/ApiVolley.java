@@ -142,7 +142,7 @@ public class ApiVolley {
         ));*/
 
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                0, -1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                60*1000, -1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
 
         stringRequest.setShouldCache(false);

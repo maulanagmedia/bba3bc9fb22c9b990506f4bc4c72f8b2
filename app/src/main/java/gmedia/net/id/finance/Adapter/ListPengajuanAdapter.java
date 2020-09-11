@@ -37,7 +37,7 @@ public class ListPengajuanAdapter extends ArrayAdapter{
 
     private static class ViewHolder {
         private RelativeLayout rlContainer;
-        private TextView tvItem0, tvItem1, tvItem2, tvItem3, tvItem4, tvTanggal;
+        private TextView tvItem0, tvItem1, tvItem2, tvItem3, tvItem4, tvItem5, tvTanggal;
         private RatingBar rbStatus;
         private TextView tvLabel;
     }
@@ -89,6 +89,7 @@ public class ListPengajuanAdapter extends ArrayAdapter{
             holder.tvItem2 = (TextView) convertView.findViewById(R.id.tv_item2);
             holder.tvItem3 = (TextView) convertView.findViewById(R.id.tv_item3);
             holder.tvItem4 = (TextView) convertView.findViewById(R.id.tv_item4);
+            holder.tvItem5 = (TextView) convertView.findViewById(R.id.tv_item5);
             holder.tvTanggal = (TextView) convertView.findViewById(R.id.tv_tanggal);
             holder.rbStatus = (RatingBar) convertView.findViewById(R.id.rb_status);
             convertView.setTag(holder);
@@ -109,6 +110,7 @@ public class ListPengajuanAdapter extends ArrayAdapter{
         holder.tvItem2.setText(itemSelected.getItem3());
         holder.tvItem3.setText(itemSelected.getItem4());
         holder.tvItem4.setText(itemSelected.getItem8());
+        holder.tvItem5.setText(itemSelected.getItem10());
         holder.tvTanggal.setText(iv.ChangeFormatDateString(itemSelected.getItem5(), FormatItem.formatTimestamp, FormatItem.formatDateDisplay2));
 
         if(itemSelected.getItem6().equals("1")){

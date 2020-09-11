@@ -103,6 +103,15 @@
                         android:textSize="15sp"
                         android:textColor="@color/color_red"
                         android:id="@+id/tv_item3"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:gravity="center_vertical"
+                        android:textSize="15sp"
+                        android:textColor="@color/color_blue"
+                        android:id="@+id/tv_item6"/>
                 </LinearLayout>
 
                 <RelativeLayout

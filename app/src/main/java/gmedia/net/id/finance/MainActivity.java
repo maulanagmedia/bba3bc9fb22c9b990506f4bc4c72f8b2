@@ -2,26 +2,21 @@ package gmedia.net.id.finance;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -36,7 +31,6 @@ import android.widget.Toast;
 
 import com.maulana.custommodul.ApiVolley;
 import com.maulana.custommodul.CustomItem;
-import com.maulana.custommodul.FormatItem;
 import com.maulana.custommodul.ItemValidation;
 import com.maulana.custommodul.RuntimePermissionsActivity;
 import com.maulana.custommodul.SessionManager;
@@ -310,6 +304,7 @@ public class MainActivity extends RuntimePermissionsActivity {
                                     jo.getString("flag"),
                                     iv.parseNullString(jo.getString("sumber")),
                                     jo.getString("symbol")
+                                    // ,jo.getString("title")
                             ));
                         }
                     }
@@ -426,6 +421,7 @@ public class MainActivity extends RuntimePermissionsActivity {
                                     , jo.getString("flag")
                                     , iv.parseNullString(jo.getString("sumber"))
                                     , jo.getString("symbol")
+                                    //, jo.getString("title")
                             ));
                         }
 

@@ -36,7 +36,7 @@ public class ListHistoryAdapter extends ArrayAdapter{
 
     private static class ViewHolder {
         private RelativeLayout rlContainer, rlStatus;
-        private TextView tvItem0, tvItem1, tvItem2, tvItem3, tvItem4, tvItem5, tvStatus;
+        private TextView tvItem0, tvItem1, tvItem2, tvItem3, tvItem4, tvItem5, tvItem6, tvStatus;
         private RatingBar rbStatus;
     }
 
@@ -89,6 +89,7 @@ public class ListHistoryAdapter extends ArrayAdapter{
             holder.tvItem3 = (TextView) convertView.findViewById(R.id.tv_item3);
             holder.tvItem4 = (TextView) convertView.findViewById(R.id.tv_item4);
             holder.tvItem5 = (TextView) convertView.findViewById(R.id.tv_item5);
+            holder.tvItem6 = (TextView) convertView.findViewById(R.id.tv_item6);
             holder.rbStatus = (RatingBar) convertView.findViewById(R.id.rb_status);
             convertView.setTag(holder);
         }else{
@@ -120,6 +121,7 @@ public class ListHistoryAdapter extends ArrayAdapter{
         }
         holder.tvItem4.setText(itemSelected.getItem9());
         holder.tvItem5.setText(itemSelected.getItem8());
+        holder.tvItem6.setText(itemSelected.getItem10());
         int rating = iv.parseNullInteger(itemSelected.getItem5());
         holder.rbStatus.setNumStars(rating);
         holder.rbStatus.setRating(iv.parseNullFloat(itemSelected.getItem5()));

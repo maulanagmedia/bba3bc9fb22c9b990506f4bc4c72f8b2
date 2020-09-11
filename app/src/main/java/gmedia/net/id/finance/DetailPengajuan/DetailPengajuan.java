@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,7 +54,7 @@ public class DetailPengajuan extends AppCompatActivity {
     private String nomorPengajuan;
     private static TextView tvTotal;
     private boolean isHistory = false;
-    private LinearLayout llFooter;
+    private static LinearLayout llFooter;
     private static double total = 0;
 
     @Override
@@ -211,6 +211,7 @@ public class DetailPengajuan extends AppCompatActivity {
             public void onSuccess(String result) {
 
                 String currentSymbol = "";
+                String flagShowing = "1";
 
                 try {
                     JSONObject response = new JSONObject(result);
@@ -241,12 +242,16 @@ public class DetailPengajuan extends AppCompatActivity {
 
                             total += iv.parseNullDouble(jo.getString("nominal"));
                             currentSymbol = jo.getString("symbol");
+                            flagShowing = jo.getString("flag_showing");
                         }
                     }else{
 
                         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                     }
 
+                    if(flagShowing.equals("0")){
+                        llFooter.setVisibility(View.GONE);
+                    }
                     setDetailPengajuanAdapter(listPengajuan);
                     pbLoading.setVisibility(View.GONE);
                     btnRefresh.setVisibility(View.GONE);
